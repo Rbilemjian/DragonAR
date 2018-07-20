@@ -213,7 +213,7 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
         fbxCarNode.loadModel(mViroView.getViroContext(), Uri.parse("file:///android_asset/Toothless.obj"), Object3D.Type.OBJ, new AsyncObject3DListener() {
             @Override
             public void onObject3DLoaded(final Object3D object, final Object3D.Type type) {
-                //preloadCarColorTextures(object);
+                preloadCarColorTextures(object);
             }
 
             @Override
@@ -226,20 +226,20 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
         mCarModelNode = fbxCarNode;
 
         // Set click listeners.
-        mCarModelNode.setClickListener(new ClickListener() {
-            @Override
-            public void onClick(int i, Node node, Vector vector) {
-                // Animate toggling the groupColor picker.
-                boolean setVisibility = !mColorChooserGroupNode.isVisible();
-                mColorChooserGroupNode.setVisible(setVisibility);
-                animateColorPickerVisible(setVisibility, mColorChooserGroupNode);
-            }
-
-            @Override
-            public void onClickState(int i, Node node, ClickState clickState, Vector vector) {
-                // No-op.
-            }
-        });
+//        mCarModelNode.setClickListener(new ClickListener() {
+//            @Override
+//            public void onClick(int i, Node node, Vector vector) {
+//                // Animate toggling the groupColor picker.
+//                boolean setVisibility = !mColorChooserGroupNode.isVisible();
+//                mColorChooserGroupNode.setVisible(setVisibility);
+//                animateColorPickerVisible(setVisibility, mColorChooserGroupNode);
+//            }
+//
+//            @Override
+//            public void onClickState(int i, Node node, ClickState clickState, Vector vector) {
+//                // No-op.
+//            }
+//        });
     }
 
     /*
@@ -331,28 +331,34 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
     }
 
     private Material preloadCarColorTextures(Node node){
-        final Texture metallicTexture = new Texture(getBitmapFromAssets("object_car_main_Metallic.png"),
-                Texture.Format.RGBA8, true, true);
-        final Texture roughnessTexture = new Texture(getBitmapFromAssets("object_car_main_Roughness.png"),
-                Texture.Format.RGBA8, true, true);
-
+//        final Texture metallicTexture = new Texture(getBitmapFromAssets("object_car_main_Metallic.png"),
+//                Texture.Format.RGBA8, true, true);
+//        final Texture roughnessTexture = new Texture(getBitmapFromAssets("object_car_main_Roughness.png"),
+//                Texture.Format.RGBA8, true, true);
+//
+//        Material material = new Material();
+//        material.setMetalnessMap(metallicTexture);
+//        material.setRoughnessMap(roughnessTexture);
+//        material.setLightingModel(Material.LightingModel.PHYSICALLY_BASED);
+//        node.getGeometry().setMaterials(Arrays.asList(material));
+//
+//        // Loop through color.
+//        for (CAR_MODEL model : CAR_MODEL.values()) {
+//            Bitmap carBitmap = getBitmapFromAssets(model.getCarSrc());
+//            final Texture carTexture = new Texture(carBitmap, Texture.Format.RGBA8, true, true);
+//            mCarColorTextures.put(model, carTexture);
+//
+//            // Preload our textures into the model
+//            material.setDiffuseTexture(carTexture);
+//        }
+//
+//        material.setDiffuseTexture(mCarColorTextures.get(CAR_MODEL.WHITE));
+//        return material;
+        final Bitmap dragonBitmap = getBitmapFromAssets("Toothless_Texture.png");
+        Texture objectTexture = new Texture(dragonBitmap, Texture.Format.RGBA8, false, false);
         Material material = new Material();
-        material.setMetalnessMap(metallicTexture);
-        material.setRoughnessMap(roughnessTexture);
-        material.setLightingModel(Material.LightingModel.PHYSICALLY_BASED);
+        material.setDiffuseTexture(objectTexture);
         node.getGeometry().setMaterials(Arrays.asList(material));
-
-        // Loop through color.
-        for (CAR_MODEL model : CAR_MODEL.values()) {
-            Bitmap carBitmap = getBitmapFromAssets(model.getCarSrc());
-            final Texture carTexture = new Texture(carBitmap, Texture.Format.RGBA8, true, true);
-            mCarColorTextures.put(model, carTexture);
-
-            // Preload our textures into the model
-            material.setDiffuseTexture(carTexture);
-        }
-
-        material.setDiffuseTexture(mCarColorTextures.get(CAR_MODEL.WHITE));
         return material;
     }
 
