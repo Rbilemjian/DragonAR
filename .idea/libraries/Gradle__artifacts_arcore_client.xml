@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: artifacts:arcore_client">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/5d50b37514a12acdf24032b99a71dd13/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/5d50b37514a12acdf24032b99a71dd13/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/a389f3c73ca527287e7d6791d46cd9df/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/core-1.2.0.aar/a389f3c73ca527287e7d6791d46cd9df/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

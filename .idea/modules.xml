@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ARTesla.iml" filepath="$PROJECT_DIR$/ARTesla.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DragonAR.iml" filepath="$PROJECT_DIR$/DragonAR.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/arcore_client/arcore_client.iml" filepath="$PROJECT_DIR$/arcore_client/arcore_client.iml" />
       <module fileurl="file://$PROJECT_DIR$/gvr_common/gvr_common.iml" filepath="$PROJECT_DIR$/gvr_common/gvr_common.iml" />
