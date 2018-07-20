@@ -246,55 +246,55 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
      Constructs a group of sphere color pickers and attaches them to the passed in group Node.
      These sphere pickers when click will change the diffuse texture of our tesla model.
      */
-    private void initColorPickerModels(Node groupNode) {
-        mColorChooserGroupNode = new Node();
-        mColorChooserGroupNode.setTransformBehaviors(EnumSet.of(Node.TransformBehavior.BILLBOARD_Y));
-        mColorChooserGroupNode.setPosition(new Vector(0,0.25,0));
-        float pickerPositions [] = {-.2f, -.1f, 0f, .1f, .2f};
-        int i = 0;
-
-        // Loop through car color model colors
-        for (final CAR_MODEL model : CAR_MODEL.values()) {
-            // Create our sphere picker geometry
-            final Node colorSphereNode = new Node();
-            float posX = pickerPositions[i++];
-            colorSphereNode.setPosition(new Vector(posX, 0, 0));
-            Sphere colorSphere = new Sphere(0.03f);
-
-            // Create sphere picker color that correlates to the car model's color
-            Material material = new Material();
-            Vector c = model.getColorPickerSrc();
-            material.setDiffuseColor(Color.rgb((int)c.x, (int)c.y, (int)c.z));
-            material.setLightingModel(Material.LightingModel.PHYSICALLY_BASED);
-
-            // Finally, set the sphere's properties
-            colorSphere.setMaterials(Arrays.asList(material));
-            colorSphereNode.setGeometry(colorSphere);
-            colorSphereNode.setShadowCastingBitMask(0);
-            mColorChooserGroupNode.addChildNode(colorSphereNode);
-
-            // Set clickListener on spheres
-            colorSphereNode.setClickListener(new ClickListener() {
-                @Override
-                public void onClick(int i, Node node, Vector vector) {
-                    //mCarModelNode.getGeometry().setMaterials();
-                    Texture texture = mCarColorTextures.get(model);
-                    Material mat = mCarModelNode.getGeometry().getMaterials().get(0);
-                    mat.setDiffuseTexture(texture);
-                    animateColorPickerClicked(colorSphereNode);
-                }
-
-                @Override
-                public void onClickState(int i, Node node, ClickState clickState, Vector vector) {
-                    // No-op.
-                }
-            });
-        }
-
-        mColorChooserGroupNode.setScale(new Vector(0,0,0));
-        mColorChooserGroupNode.setVisible(false);
-        groupNode.addChildNode(mColorChooserGroupNode);
-    }
+//    private void initColorPickerModels(Node groupNode) {
+//        mColorChooserGroupNode = new Node();
+//        mColorChooserGroupNode.setTransformBehaviors(EnumSet.of(Node.TransformBehavior.BILLBOARD_Y));
+//        mColorChooserGroupNode.setPosition(new Vector(0,0.25,0));
+//        float pickerPositions [] = {-.2f, -.1f, 0f, .1f, .2f};
+//        int i = 0;
+//
+//        // Loop through car color model colors
+//        for (final CAR_MODEL model : CAR_MODEL.values()) {
+//            // Create our sphere picker geometry
+//            final Node colorSphereNode = new Node();
+//            float posX = pickerPositions[i++];
+//            colorSphereNode.setPosition(new Vector(posX, 0, 0));
+//            Sphere colorSphere = new Sphere(0.03f);
+//
+//            // Create sphere picker color that correlates to the car model's color
+//            Material material = new Material();
+//            Vector c = model.getColorPickerSrc();
+//            material.setDiffuseColor(Color.rgb((int)c.x, (int)c.y, (int)c.z));
+//            material.setLightingModel(Material.LightingModel.PHYSICALLY_BASED);
+//
+//            // Finally, set the sphere's properties
+//            colorSphere.setMaterials(Arrays.asList(material));
+//            colorSphereNode.setGeometry(colorSphere);
+//            colorSphereNode.setShadowCastingBitMask(0);
+//            mColorChooserGroupNode.addChildNode(colorSphereNode);
+//
+//            // Set clickListener on spheres
+//            colorSphereNode.setClickListener(new ClickListener() {
+//                @Override
+//                public void onClick(int i, Node node, Vector vector) {
+//                    //mCarModelNode.getGeometry().setMaterials();
+//                    Texture texture = mCarColorTextures.get(model);
+//                    Material mat = mCarModelNode.getGeometry().getMaterials().get(0);
+//                    mat.setDiffuseTexture(texture);
+//                    animateColorPickerClicked(colorSphereNode);
+//                }
+//
+//                @Override
+//                public void onClickState(int i, Node node, ClickState clickState, Vector vector) {
+//                    // No-op.
+//                }
+//            });
+//        }
+//
+//        mColorChooserGroupNode.setScale(new Vector(0,0,0));
+//        mColorChooserGroupNode.setVisible(false);
+//        groupNode.addChildNode(mColorChooserGroupNode);
+//    }
 
     private void initSceneLights(Node groupNode){
         Node rootLightNode = new Node();
@@ -399,13 +399,13 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
         AnimationTransaction.commit();
     }
 
-    private void animateColorPickerVisible(boolean isVisible, Node groupNode) {
-        if (isVisible){
-            animateScale(groupNode, 500, new Vector(1,1,1), AnimationTimingFunction.Bounce, null);
-        } else {
-            animateScale(groupNode, 200, new Vector(0,0,0), AnimationTimingFunction.Bounce, null);
-        }
-    }
+//    private void animateColorPickerVisible(boolean isVisible, Node groupNode) {
+//        if (isVisible){
+//            animateScale(groupNode, 500, new Vector(1,1,1), AnimationTimingFunction.Bounce, null);
+//        } else {
+//            animateScale(groupNode, 200, new Vector(0,0,0), AnimationTimingFunction.Bounce, null);
+//        }
+//    }
 
     private void animateCarVisible(Node car) {
         animateScale(car, 500, new Vector(0.09f, 0.09f, 0.09f), AnimationTimingFunction.EaseInEaseOut, null);
