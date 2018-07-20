@@ -130,7 +130,7 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
         // visible when the ARImageTarget is found.
         Node teslaNode = new Node();
         initCarModel(teslaNode);
-        initColorPickerModels(teslaNode);
+        //initColorPickerModels(teslaNode);
         initSceneLights(teslaNode);
         teslaNode.setVisible(false);
         mScene.getRootNode().addChildNode(teslaNode);
@@ -210,15 +210,15 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
         // Creation of ObjectJni to the right
         Object3D fbxCarNode = new Object3D();
         fbxCarNode.setScale(new Vector(0.00f, 0.00f, 0.00f));
-        fbxCarNode.loadModel(mViroView.getViroContext(), Uri.parse("file:///android_asset/object_car.obj"), Object3D.Type.OBJ, new AsyncObject3DListener() {
+        fbxCarNode.loadModel(mViroView.getViroContext(), Uri.parse("file:///android_asset/Toothless.obj"), Object3D.Type.OBJ, new AsyncObject3DListener() {
             @Override
             public void onObject3DLoaded(final Object3D object, final Object3D.Type type) {
-                preloadCarColorTextures(object);
+                //preloadCarColorTextures(object);
             }
 
             @Override
             public void onObject3DFailed(final String error) {
-                Log.e(TAG,"Car Model Failed to load.");
+                Log.e(TAG,"Dragon Model Failed to load.");
             }
         });
 
