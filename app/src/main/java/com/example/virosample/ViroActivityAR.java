@@ -19,13 +19,11 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.hardware.camera2.CameraCharacteristics;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 
-import com.google.common.logging.nano.Vr;
 import com.viro.core.ARAnchor;
 import com.viro.core.ARImageTarget;
 import com.viro.core.ARNode;
@@ -38,9 +36,6 @@ import com.viro.core.ClickState;
 import com.viro.core.Material;
 import com.viro.core.Node;
 import com.viro.core.Object3D;
-import com.viro.core.Sound;
-import com.viro.core.SpatialSound;
-import com.viro.core.Sphere;
 import com.viro.core.Spotlight;
 import com.viro.core.Surface;
 import com.viro.core.Texture;
@@ -50,7 +45,6 @@ import com.viro.core.ViroViewARCore;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,33 +59,33 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
     private static final String TAG = ViroActivityAR.class.getSimpleName();
     private ViroView mViroView;
     private ARScene mScene;
-    private Node mCarModelNode;
+    private Node mDragonModelNode;
     private Node mColorChooserGroupNode;
     private Map<String, Pair<ARImageTarget, Node>> mTargetedNodesMap;
-    private HashMap<CAR_MODEL, Texture> mCarColorTextures = new HashMap<>();
-
-    private enum CAR_MODEL{
-        WHITE("object_car_main_Base_Color.png",         new Vector(231,231,231)),
-        BLUE("object_car_main_Base_Color_blue.png",     new Vector(19, 42, 143)),
-        GREY("object_car_main_Base_Color_grey.png",     new Vector(75, 76, 79)),
-        RED("object_car_main_Base_Color_red.png",       new Vector(168, 0, 0)),
-        YELLOW("object_car_main_Base_Color_yellow.png", new Vector(200, 142, 31));
-
-        private final String mDiffuseSource;
-        private final Vector mUIPickerColorSource;
-
-        CAR_MODEL(String carSrc, Vector pickerColorSrc){
-            mDiffuseSource = carSrc;
-            mUIPickerColorSource = pickerColorSrc;
-        }
-
-        public String getCarSrc(){
-            return mDiffuseSource;
-        }
-        public Vector getColorPickerSrc(){
-            return mUIPickerColorSource;
-        }
-    }
+//    private HashMap<CAR_MODEL, Texture> mCarColorTextures = new HashMap<>();
+//
+//    private enum CAR_MODEL{
+//        WHITE("object_car_main_Base_Color.png",         new Vector(231,231,231)),
+//        BLUE("object_car_main_Base_Color_blue.png",     new Vector(19, 42, 143)),
+//        GREY("object_car_main_Base_Color_grey.png",     new Vector(75, 76, 79)),
+//        RED("object_car_main_Base_Color_red.png",       new Vector(168, 0, 0)),
+//        YELLOW("object_car_main_Base_Color_yellow.png", new Vector(200, 142, 31));
+//
+//        private final String mDiffuseSource;
+//        private final Vector mUIPickerColorSource;
+//
+//        CAR_MODEL(String carSrc, Vector pickerColorSrc){
+//            mDiffuseSource = carSrc;
+//            mUIPickerColorSource = pickerColorSrc;
+//        }
+//
+//        public String getCarSrc(){
+//            return mDiffuseSource;
+//        }
+//        public Vector getColorPickerSrc(){
+//            return mUIPickerColorSource;
+//        }
+//    }
 
     // +---------------------------------------------------------------------------+
     //  Initialization
@@ -129,21 +123,21 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
 
         // Create an ARImageTarget for the Tesla logo
         Bitmap teslaLogoTargetBmp = getBitmapFromAssets("logo.png");
-        ARImageTarget teslaTarget = new ARImageTarget(teslaLogoTargetBmp, ARImageTarget.Orientation.Up, 0.188f);
-        mScene.addARImageTarget(teslaTarget);
+        ARImageTarget dragonTarget = new ARImageTarget(teslaLogoTargetBmp, ARImageTarget.Orientation.Up, 0.188f);
+        mScene.addARImageTarget(dragonTarget);
 
         // Build the Tesla car Node and add it to the Scene. Set it to invisible: it will be made
         // visible when the ARImageTarget is found.
-        Node teslaNode = new Node();
-        initCarModel(teslaNode);
-        //initColorPickerModels(teslaNode);
-        initSceneLights(teslaNode);
-        teslaNode.setVisible(false);
-        mScene.getRootNode().addChildNode(teslaNode);
+        Node dragonNode = new Node();
+        initDragonModel(dragonNode);
+        //initColorPickerModels(dragonNode);
+        initSceneLights(dragonNode);
+        dragonNode.setVisible(false);
+        mScene.getRootNode().addChildNode(dragonNode);
 
         // Link the Node with the ARImageTarget, such that when the image target is
         // found, we'll render the Node.
-        linkTargetWithNode(teslaTarget, teslaNode);
+        linkTargetWithNode(dragonTarget, dragonNode);
     }
 
     /*
@@ -181,7 +175,7 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
         imageTargetNode.setPosition(anchor.getPosition());
         imageTargetNode.setRotation(rot);
         imageTargetNode.setVisible(true);
-        animateCarVisible(mCarModelNode);
+        animateDragonVisible(mDragonModelNode);
 
         // Stop the node from moving in place once found
         ARImageTarget imgTarget = mTargetedNodesMap.get(anchorId).first;
@@ -212,14 +206,14 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
     /*
      Init, loads the the Tesla Object3D, and attaches it to the passed in groupNode.
      */
-    private void initCarModel(Node groupNode) {
+    private void initDragonModel(Node groupNode) {
         // Creation of ObjectJni to the right
-        Object3D fbxCarNode = new Object3D();
-        fbxCarNode.setScale(new Vector(0.00f, 0.00f, 0.00f));
-        fbxCarNode.loadModel(mViroView.getViroContext(), Uri.parse("file:///android_asset/Toothless.obj"), Object3D.Type.OBJ, new AsyncObject3DListener() {
+        Object3D fbxDragonNode = new Object3D();
+        fbxDragonNode.setScale(new Vector(0.00f, 0.00f, 0.00f));
+        fbxDragonNode.loadModel(mViroView.getViroContext(), Uri.parse("file:///android_asset/Toothless.obj"), Object3D.Type.OBJ, new AsyncObject3DListener() {
             @Override
             public void onObject3DLoaded(final Object3D object, final Object3D.Type type) {
-                preloadCarColorTextures(object);
+                preloadDragonColorTextures(object);
             }
 
             @Override
@@ -228,11 +222,11 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
             }
         });
 
-        groupNode.addChildNode(fbxCarNode);
-        mCarModelNode = fbxCarNode;
+        groupNode.addChildNode(fbxDragonNode);
+        mDragonModelNode = fbxDragonNode;
 
         // Set click listeners.
-        mCarModelNode.setClickListener(new ClickListener() {
+        mDragonModelNode.setClickListener(new ClickListener() {
             @Override
             public void onClick(int i, Node node, Vector vector) {
                 AnimationTransaction.begin();
@@ -294,9 +288,9 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
 //            colorSphereNode.setClickListener(new ClickListener() {
 //                @Override
 //                public void onClick(int i, Node node, Vector vector) {
-//                    //mCarModelNode.getGeometry().setMaterials();
+//                    //mDragonModelNode.getGeometry().setMaterials();
 //                    Texture texture = mCarColorTextures.get(model);
-//                    Material mat = mCarModelNode.getGeometry().getMaterials().get(0);
+//                    Material mat = mDragonModelNode.getGeometry().getMaterials().get(0);
 //                    mat.setDiffuseTexture(texture);
 //                    animateColorPickerClicked(colorSphereNode);
 //                }
@@ -347,7 +341,7 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
         mScene.setLightingEnvironment(environment);
     }
 
-    private Material preloadCarColorTextures(Node node){
+    private Material preloadDragonColorTextures(Node node){
 //        final Texture metallicTexture = new Texture(getBitmapFromAssets("object_car_main_Metallic.png"),
 //                Texture.Format.RGBA8, true, true);
 //        final Texture roughnessTexture = new Texture(getBitmapFromAssets("object_car_main_Roughness.png"),
@@ -424,8 +418,8 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
 //        }
 //    }
 
-    private void animateCarVisible(Node car) {
-        animateScale(car, 500, new Vector(0.09f, 0.09f, 0.09f), AnimationTimingFunction.EaseInEaseOut, null);
+    private void animateDragonVisible(Node dragon) {
+        animateScale(dragon, 500, new Vector(0.09f, 0.09f, 0.09f), AnimationTimingFunction.EaseInEaseOut, null);
     }
 
     private void animateColorPickerClicked(final Node picker){
