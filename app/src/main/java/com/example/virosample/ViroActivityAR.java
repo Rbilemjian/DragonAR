@@ -19,11 +19,13 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.hardware.camera2.CameraCharacteristics;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 
+import com.google.common.logging.nano.Vr;
 import com.viro.core.ARAnchor;
 import com.viro.core.ARImageTarget;
 import com.viro.core.ARNode;
@@ -36,6 +38,8 @@ import com.viro.core.ClickState;
 import com.viro.core.Material;
 import com.viro.core.Node;
 import com.viro.core.Object3D;
+import com.viro.core.Sound;
+import com.viro.core.SpatialSound;
 import com.viro.core.Sphere;
 import com.viro.core.Spotlight;
 import com.viro.core.Surface;
@@ -56,6 +60,8 @@ import java.util.Map;
  * the user customize the car.
  */
 public class ViroActivityAR extends Activity implements ARScene.Listener {
+    private boolean turnedRight = false;
+    private boolean turnedLeft = false;
     private static final String TAG = ViroActivityAR.class.getSimpleName();
     private ViroView mViroView;
     private ARScene mScene;
@@ -226,20 +232,31 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
         mCarModelNode = fbxCarNode;
 
         // Set click listeners.
-//        mCarModelNode.setClickListener(new ClickListener() {
-//            @Override
-//            public void onClick(int i, Node node, Vector vector) {
-//                // Animate toggling the groupColor picker.
-//                boolean setVisibility = !mColorChooserGroupNode.isVisible();
-//                mColorChooserGroupNode.setVisible(setVisibility);
-//                animateColorPickerVisible(setVisibility, mColorChooserGroupNode);
-//            }
-//
-//            @Override
-//            public void onClickState(int i, Node node, ClickState clickState, Vector vector) {
-//                // No-op.
-//            }
-//        });
+        mCarModelNode.setClickListener(new ClickListener() {
+            @Override
+            public void onClick(int i, Node node, Vector vector) {
+                AnimationTransaction.begin();
+                AnimationTransaction.setAnimationDuration(350);
+                if(turnedLeft) {
+                    node.setRotation(new Vector(0, -0.25f, 0));
+                    turnedLeft = false;
+                }
+                else if(turnedRight) {
+                    node.setRotation(new Vector(0,0.25f,0));
+                    turnedRight = false;
+                }
+                else {
+                    node.setRotation(new Vector(0,0.25f,0));
+                    turnedLeft = true;
+                }
+                AnimationTransaction.commit();
+            }
+
+            @Override
+            public void onClickState(int i, Node node, ClickState clickState, Vector vector) {
+                // No-op.
+            }
+        });
     }
 
     /*
@@ -304,7 +321,7 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
         spotLight.setPosition(new Vector(0,5,0));
         spotLight.setColor(Color.parseColor("#FFFFFF"));
         spotLight.setDirection(new Vector(0,-1,0));
-        spotLight.setIntensity(300);
+        spotLight.setIntensity(30);
         spotLight.setInnerAngle(5);
         spotLight.setOuterAngle(25);
         spotLight.setShadowMapSize(2048);
