@@ -123,11 +123,11 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
         mViroView.setScene(mScene);
 
         // Create an ARImageTarget for the Tesla logo
-        Bitmap teslaLogoTargetBmp = getBitmapFromAssets("logo.png");
-        ARImageTarget dragonTarget = new ARImageTarget(teslaLogoTargetBmp, ARImageTarget.Orientation.Up, 0.188f);
+        Bitmap dragonLogoTargetBMP = getBitmapFromAssets("logo.png");
+        ARImageTarget dragonTarget = new ARImageTarget(dragonLogoTargetBMP, ARImageTarget.Orientation.Up, 0.188f);
         mScene.addARImageTarget(dragonTarget);
 
-        // Build the Tesla car Node and add it to the Scene. Set it to invisible: it will be made
+        // Build the Dragon Node and add it to the Scene. Set it to invisible: it will be made
         // visible when the ARImageTarget is found.
         Node dragonNode = new Node();
         initDragonModel(dragonNode);
@@ -238,6 +238,7 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
                 Sound roar = new Sound(mViroView.getViroContext(), Uri.parse("file:///android_asset/roar.mp3"), null);
                 roar.setVolume(1.0f);
                 roar.setLoop(false);
+                roar.play();
                 AnimationTransaction.begin();
                 AnimationTransaction.setAnimationDuration(350);
                 if(turnedLeft) {
@@ -253,7 +254,6 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
                     turnedLeft = true;
                 }
                 AnimationTransaction.commit();
-                roar.play();
             }
 
             @Override
