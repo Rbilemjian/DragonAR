@@ -215,9 +215,9 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
      */
     private void initDragonModel(Node groupNode) {
         // Creation of ObjectJni to the right
-        Object3D fbxDragonNode = new Object3D();
-        fbxDragonNode.setScale(new Vector(0.00f, 0.00f, 0.00f));
-        fbxDragonNode.loadModel(mViroView.getViroContext(), Uri.parse("file:///android_asset/Toothless.obj"), Object3D.Type.OBJ, new AsyncObject3DListener() {
+        Object3D objDragonNode = new Object3D();
+        objDragonNode.setScale(new Vector(0.00f, 0.00f, 0.00f));
+        objDragonNode.loadModel(mViroView.getViroContext(), Uri.parse("file:///android_asset/Toothless.obj"), Object3D.Type.OBJ, new AsyncObject3DListener() {
             @Override
             public void onObject3DLoaded(final Object3D object, final Object3D.Type type) {
                 preloadDragonColorTextures(object);
@@ -229,16 +229,16 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
             }
         });
 
-        groupNode.addChildNode(fbxDragonNode);
-        mDragonModelNode = fbxDragonNode;
+        groupNode.addChildNode(objDragonNode);
+        mDragonModelNode = objDragonNode;
 
         // Set click listeners.
         mDragonModelNode.setClickListener(new ClickListener() {
             @Override
             public void onClick(int i, Node node, Vector vector) {
 
-
-                if(numTaps == 4) {
+                numTaps++;
+                if(numTaps == 3) {
                     Sound roar = new Sound(mViroView.getViroContext(), Uri.parse("file:///android_asset/roar.mp3"), null);
                     roar.setVolume(1.0f);
                     roar.setLoop(false);
@@ -268,7 +268,6 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
                     }
                     AnimationTransaction.commit();
                 }
-                numTaps++;
 
             }
 
