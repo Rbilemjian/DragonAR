@@ -55,6 +55,7 @@ import java.util.Map;
  * the user customize the car.
  */
 public class ViroActivityAR extends Activity implements ARScene.Listener {
+    private int numTaps = 0;
     private boolean turnedRight = false;
     private boolean turnedLeft = false;
     private static final String TAG = ViroActivityAR.class.getSimpleName();
@@ -235,25 +236,40 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
         mDragonModelNode.setClickListener(new ClickListener() {
             @Override
             public void onClick(int i, Node node, Vector vector) {
-                Sound roar = new Sound(mViroView.getViroContext(), Uri.parse("file:///android_asset/roar.mp3"), null);
-                roar.setVolume(1.0f);
-                roar.setLoop(false);
-                roar.play();
-                AnimationTransaction.begin();
-                AnimationTransaction.setAnimationDuration(350);
-                if(turnedLeft) {
-                    node.setRotation(new Vector(0, -0.25f, 0));
-                    turnedLeft = false;
-                }
-                else if(turnedRight) {
-                    node.setRotation(new Vector(0,0.25f,0));
-                    turnedRight = false;
+
+
+                if(numTaps == 4) {
+                    Sound roar = new Sound(mViroView.getViroContext(), Uri.parse("file:///android_asset/roar.mp3"), null);
+                    roar.setVolume(1.0f);
+                    roar.setLoop(false);
+                    roar.play();
+                    numTaps = 0;
+                    AnimationTransaction.begin();
+                    AnimationTransaction.setAnimationDuration(350);
+                    node.setRotation(new Vector(-0.25f, 0, 0));
+                    AnimationTransaction.commit();
                 }
                 else {
-                    node.setRotation(new Vector(0,0.25f,0));
-                    turnedLeft = true;
+                    Sound steps = new Sound(mViroView.getViroContext(), Uri.parse("file:///android_asset/steps.mp3"), null);
+                    steps.setVolume(1.0f);
+                    steps.setLoop(false);
+                    steps.play();
+                    AnimationTransaction.begin();
+                    AnimationTransaction.setAnimationDuration(700);
+                    if (turnedLeft) {
+                        node.setRotation(new Vector(0, -0.25f, 0));
+                        turnedLeft = false;
+                    } else if (turnedRight) {
+                        node.setRotation(new Vector(0, 0.25f, 0));
+                        turnedRight = false;
+                    } else {
+                        node.setRotation(new Vector(0, 0.25f, 0));
+                        turnedLeft = true;
+                    }
+                    AnimationTransaction.commit();
                 }
-                AnimationTransaction.commit();
+                numTaps++;
+
             }
 
             @Override
