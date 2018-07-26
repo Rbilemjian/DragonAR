@@ -36,6 +36,7 @@ import com.viro.core.ClickState;
 import com.viro.core.Material;
 import com.viro.core.Node;
 import com.viro.core.Object3D;
+import com.viro.core.Sound;
 import com.viro.core.Spotlight;
 import com.viro.core.Surface;
 import com.viro.core.Texture;
@@ -177,6 +178,11 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
         imageTargetNode.setVisible(true);
         animateDragonVisible(mDragonModelNode);
 
+        AnimationTransaction.begin();
+        AnimationTransaction.setAnimationDuration(300);
+        mDragonModelNode.setPosition(new Vector(0,0,-0.19f));
+        AnimationTransaction.commit();
+
         // Stop the node from moving in place once found
         ARImageTarget imgTarget = mTargetedNodesMap.get(anchorId).first;
         mScene.removeARImageTarget(imgTarget);
@@ -229,6 +235,9 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
         mDragonModelNode.setClickListener(new ClickListener() {
             @Override
             public void onClick(int i, Node node, Vector vector) {
+                Sound roar = new Sound(mViroView.getViroContext(), Uri.parse("file:///android_asset/roar.mp3"), null);
+                roar.setVolume(1.0f);
+                roar.setLoop(false);
                 AnimationTransaction.begin();
                 AnimationTransaction.setAnimationDuration(350);
                 if(turnedLeft) {
@@ -244,6 +253,7 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
                     turnedLeft = true;
                 }
                 AnimationTransaction.commit();
+                roar.play();
             }
 
             @Override
