@@ -215,12 +215,18 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
             public void onClick(int i, Node node, Vector vector) {
 
                 numTaps++;
-                if(numTaps == 3) {
+                if(numTaps == 4) {
+                    AnimationTransaction.begin();
+                    AnimationTransaction.setAnimationDuration(350);
+                    node.setRotation(new Vector(0, 0, 0));
+                    AnimationTransaction.commit();
+                    numTaps = 0;
+                }
+                else if(numTaps == 3) {
                     Sound roar = new Sound(mViroView.getViroContext(), Uri.parse("file:///android_asset/roar.mp3"), null);
                     roar.setVolume(1.0f);
                     roar.setLoop(false);
                     roar.play();
-                    numTaps = 0;
                     AnimationTransaction.begin();
                     AnimationTransaction.setAnimationDuration(350);
                     node.setRotation(new Vector(-0.25f, 0, 0));
