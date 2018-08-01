@@ -272,9 +272,9 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
         spotLight.setColor(Color.parseColor("#FFFFFF"));
         spotLight.setDirection(new Vector(0,-1,0));
         spotLight.setIntensity(20);
-        spotLight.setInnerAngle(5);
-        spotLight.setOuterAngle(25);
-        spotLight.setShadowMapSize(2048);
+        spotLight.setInnerAngle(1);
+        spotLight.setOuterAngle(50);
+        spotLight.setShadowMapSize(8192);
         spotLight.setShadowNearZ(2);
         spotLight.setShadowFarZ(7);
         spotLight.setShadowOpacity(.7f);
@@ -284,7 +284,7 @@ public class ViroActivityAR extends Activity implements ARScene.Listener {
         // Add our shadow planes.
         final Material material = new Material();
         material.setShadowMode(Material.ShadowMode.TRANSPARENT);
-        Surface surface = new Surface(2, 2);
+        Surface surface = new Surface(10,10);
         surface.setMaterials(Arrays.asList(material));
         Node surfaceShadowNode = new Node();
         surfaceShadowNode.setRotation(new Vector(Math.toRadians(-90), 0, 0));
